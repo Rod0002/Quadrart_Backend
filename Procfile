@@ -1,0 +1,1 @@
+web: java $JAVA_OPTS -jar target/dependency/Quadrart.jar --port $PORT target/*.war
