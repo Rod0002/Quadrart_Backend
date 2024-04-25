@@ -111,7 +111,7 @@
 				<configuration>
 					<appName>Quadrart</appName>
 					<includeTarget>true</includeTarget>
-					<includeProperties>lse</includeProperties>
+					<includeProperties>true</includeProperties>
 					<includes>
 						<include>target/Quadrart.jar</include>
 					</includes>
