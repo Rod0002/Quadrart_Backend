@@ -97,4 +97,4 @@ Este projeto está licenciado sob a MIT License.
 
 ### Contato
 
-Para mais informações ou dúvidas, entre em contato com a equipe de desenvolvimento pelo Linkedin:https://shre.ink/8q0B(Leonardo) & www.linkedin.com/in/rodrigosilvalima02(Rodrigo).
+Para mais informações ou dúvidas, entre em contato com a equipe de desenvolvimento pelo Linkedin: [Leonardo](https://www.linkedin.com/in/leonardo-guimar%C3%A3es-517510211/) & [Rodrigo](www.linkedin.com/in/rodrigosilvalima02).
