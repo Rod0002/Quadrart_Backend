@@ -4,6 +4,12 @@
 
 Este README fornece uma visão geral das funcionalidades do projeto Quadrart, destacando tanto o Back-End quanto o Front-End, além de fornecer informações sobre como usar e contribuir para o projeto.
 
+
+## Tech Stack🔨
+
+<img src="{![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)}" />
+
+
 ### Introdução
 
 O projeto Quadrart é uma aplicação que oferece funcionalidades relacionadas ao gerenciamento e exibição de quadros musicais inspirados em artistas. Utilizando tecnologias modernas, o projeto visa proporcionar uma experiência intuitiva e envolvente para os usuários.
@@ -86,4 +92,4 @@ Este projeto está licenciado sob a MIT License.
 
 ### Contato
 
-Para mais informações ou dúvidas, entre em contato com a equipe de desenvolvimento pelo Linkedin:https://shre.ink/8q0B(Leonardo) & https://shre.ink/8q0t(Rodrigo).
+Para mais informações ou dúvidas, entre em contato com a equipe de desenvolvimento pelo Linkedin:https://shre.ink/8q0B(Leonardo) & www.linkedin.com/in/rodrigosilvalima02(Rodrigo).
