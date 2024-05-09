@@ -15,9 +15,23 @@
 	<name>demo</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
+<<<<<<< HEAD
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+=======
+	    <maven.compiler.source>17</maven.compiler.source>
+	    <maven.compiler.target>17</maven.compiler.target>
+		<java.version>17</java.version>
+	</properties>
+	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+>>>>>>> a8e55b201a73f6e1e9db59dd7d139af492c00c78
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -96,6 +110,22 @@
 					</excludes>
 				</configuration>
 			</plugin>
+<<<<<<< HEAD
+=======
+			<plugin>
+				<groupId>com.heroku.sdk</groupId>
+				<artifactId>heroku-maven-plugin</artifactId>
+				<version>3.0.3</version>
+				<configuration>
+					<appName>Quadrart</appName>
+					<includeTarget>true</includeTarget>
+					<includeProperties>true</includeProperties>
+					<includes>
+						<include>target/Quadrart.jar</include>
+					</includes>
+				</configuration>
+			</plugin>
+>>>>>>> a8e55b201a73f6e1e9db59dd7d139af492c00c78
 		</plugins>
 	</build>
 	<repositories>

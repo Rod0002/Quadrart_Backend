@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.quadrart.Storage.StorageException;
 import com.quadrart.Storage.StorageFileNotFoundException;
 
+<<<<<<< HEAD
 /*
  * Este abaixo é um controlador de erros, que faz tratamento de alguns erros
  * especificos que podem ocorrer nos controladores.
@@ -17,6 +18,8 @@ import com.quadrart.Storage.StorageFileNotFoundException;
  * Em casos de erros não tratados, durante uma requisição, cada um erro
  * seja jogado, o comportamento do string é retornar uma resposta 403.
  */
+=======
+>>>>>>> a8e55b201a73f6e1e9db59dd7d139af492c00c78
 @RestControllerAdvice
 public class GlobalErrorHandler {
 
