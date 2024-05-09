@@ -16,4 +16,6 @@ public interface UsuarioService extends UserDetailsService{
     Usuario createUser(Usuario usuario);
 
     String deleteUser(Long Id);
+
+    Usuario updateUser(Usuario usuario);
 }

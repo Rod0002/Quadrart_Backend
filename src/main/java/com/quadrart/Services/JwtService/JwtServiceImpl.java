@@ -10,14 +10,12 @@ import javax.crypto.SecretKey;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
-
 import com.quadrart.Models.Usuario.Usuario;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-
 
 /*
  * Código onde há a implementação da interface JwtService.
@@ -40,7 +38,7 @@ public class JwtServiceImpl implements JwtService {
 
     /*
      * Extrai o subject do token JWT através
-     * da função extractClaim. 
+     * da função extractClaim.
      */
 
     @Override
@@ -55,7 +53,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String generateToken(Usuario usuario, long hours) {
-       return generateToken(new HashMap(), usuario, hours);
+        return generateToken(new HashMap(), usuario, hours);
     }
 
     /*
@@ -70,24 +68,26 @@ public class JwtServiceImpl implements JwtService {
         return (username.equals(usuario.getUsername()) && !isTokenExpired(jwt));
     }
 
-
     /*
-     * Função que efetivamente gerá o token, recebendo um Map, contendo claims adicionais
+     * Função que efetivamente gerá o token, recebendo um Map, contendo claims
+     * adicionais
      * que podem ser adicionadas ao token, o usuário, e o número de horas.
      * 
-     * Inicialmente um objeto Jwts é construido, e que recebe as claims, a data de expiração
-     * do token, e o momento de sua emissão. O token é então assinado com a chave privada,
+     * Inicialmente um objeto Jwts é construido, e que recebe as claims, a data de
+     * expiração
+     * do token, e o momento de sua emissão. O token é então assinado com a chave
+     * privada,
      * compactado e retornado.
      */
-    private String generateToken(Map<String, Object> extraClaims, Usuario usuario, long hours){
+    private String generateToken(Map<String, Object> extraClaims, Usuario usuario, long hours) {
         return Jwts
-        .builder()
-        .claims(extraClaims)
-        .subject(usuario.getUsername())
-        .expiration(new Date(System.currentTimeMillis() + hours * 1000 * 60))
-        .issuedAt(new Date())
-        .signWith(getVerifyKey(secretKeyEncoded))
-        .compact();
+                .builder()
+                .claims(extraClaims)
+                .subject(usuario.getUsername())
+                .expiration(new Date(System.currentTimeMillis() + (hours * 1000 * 60 * 60)))
+                .issuedAt(new Date())
+                .signWith(getVerifyKey(secretKeyEncoded))
+                .compact();
     }
 
     /*
@@ -96,7 +96,7 @@ public class JwtServiceImpl implements JwtService {
      * A função recebe o token Jwt, e a chave privada é necessária para
      * para extrair a informação do token.
      */
-    private Claims extractAllClaims(String jwt){
+    private Claims extractAllClaims(String jwt) {
         return Jwts
                 .parser()
                 .verifyWith(getVerifyKey(secretKeyEncoded))
@@ -112,6 +112,7 @@ public class JwtServiceImpl implements JwtService {
 
     private <T> T extractClaim(String jwt, Function<Claims, T> claimsResolvers) {
         final Claims claims = extractAllClaims(jwt);
+        System.out.println(claims);
         return claimsResolvers.apply(claims);
     }
 
@@ -128,19 +129,19 @@ public class JwtServiceImpl implements JwtService {
      * baseado na resposta.
      */
 
-    private boolean isTokenExpired(String jwt) {
+    @Override
+    public boolean isTokenExpired(String jwt) {
         return extractExpiration(jwt).before(new Date());
     }
-
 
     /*
      * Pega a string da secretKey, e faz o decode para
      * Base64.
      */
-    
+
     private SecretKey getVerifyKey(String secretKeyEncoded) {
         byte[] decodedKey = Decoders.BASE64.decode(secretKeyEncoded);
         return Keys.hmacShaKeyFor(decodedKey);
     }
-    
+
 }

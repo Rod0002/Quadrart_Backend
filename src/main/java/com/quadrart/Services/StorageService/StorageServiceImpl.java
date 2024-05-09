@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import com.quadrart.Storage.StorageProperties;
 import com.quadrart.Storage.StorageException;
 import com.quadrart.Storage.StorageFileNotFoundException;
@@ -46,7 +45,7 @@ public class StorageServiceImpl implements StorageService {
             throw new StorageException("O caminho para o upload do arquivo não pode ser vazio");
         }
 
-        this.imagesFolder = Paths.get(properties.getLocation());
+        this.imagesFolder = Paths.get(properties.getLocation()).normalize().toAbsolutePath();
     }
 
     /*
@@ -76,7 +75,8 @@ public class StorageServiceImpl implements StorageService {
      * não seja ao caminho absoluto, que é o caminho onde as imagens são salvas, um
      * erro é jogado.
      * 
-     * Caso seja, se tenta criar o arquivo na pasta criada, e caso haja erro no processo
+     * Caso seja, se tenta criar o arquivo na pasta criada, e caso haja erro no
+     * processo
      * de criação um erro é jogado
      */
     @Override
@@ -88,9 +88,8 @@ public class StorageServiceImpl implements StorageService {
 
             Path destinationFile = this.imagesFolder.resolve(
                     Paths.get(filename))
-                            .normalize()
-                            .toAbsolutePath();
-
+                    .normalize()
+                    .toAbsolutePath();
 
             if (!destinationFile.getParent().equals(this.imagesFolder.toAbsolutePath())) {
                 throw new StorageException("Não se pode salvar um arquivo fora do diretório atual");
@@ -105,7 +104,8 @@ public class StorageServiceImpl implements StorageService {
     }
 
     /*
-     * Carrega todas as imagens da basse de dados. Através da função walk, todos os arquivos
+     * Carrega todas as imagens da basse de dados. Através da função walk, todos os
+     * arquivos
      * são lidos e retornados.
      */
     @Override
@@ -126,7 +126,6 @@ public class StorageServiceImpl implements StorageService {
     public Path load(String filename) {
         return imagesFolder.resolve(filename);
     }
-
 
     /*
      * Retorna uma imagem no formato Resource. Primeiro
@@ -151,6 +150,25 @@ public class StorageServiceImpl implements StorageService {
         } catch (MalformedURLException e) {
             throw new StorageFileNotFoundException("Não foi possível ler o arquivo: " + filename, e);
         }
+    }
+
+    @Override
+    public void delete(String filename) {
+        Path destinationFile = this.imagesFolder.resolve(
+                Paths.get(filename))
+                .normalize()
+                .toAbsolutePath();
+
+        if (!destinationFile.getParent().equals(this.imagesFolder.toAbsolutePath())) {
+            throw new StorageException("Não se pode deletar um arquivo fora do diretório atual");
+        }
+
+        try {
+            Files.deleteIfExists(destinationFile);
+        } catch (IOException e){
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
+
     }
 
     /*

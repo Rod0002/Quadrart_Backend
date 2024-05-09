@@ -87,7 +87,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             return;
         }
 
-        username = jwtService.extractUsername(jwt);
+        try{
+            username = jwtService.extractUsername(jwt);
+        } catch (Exception e){
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
 			Usuario usuario = usuarioService.loadUserByUsername(username);
@@ -99,7 +104,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				context.setAuthentication(authToken);
 				SecurityContextHolder.setContext(context);
-			}
+			} 
 		}
 		filterChain.doFilter(request, response);
 

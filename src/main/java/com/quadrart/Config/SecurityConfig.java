@@ -3,6 +3,7 @@ package com.quadrart.Config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -11,8 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import com.quadrart.Handlers.CustomAuthenticationHandler.CustomAuthenticationProvider;
-
+import com.quadrart.Handlers.CustomAuthenticationProvider;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,14 +31,10 @@ public class SecurityConfig {
          * métodos permitidos por caminho, csrf, e etc.
          */
         http
-                /* .cors(Customizer.withDefaults())
-                 * 
-                 * Caro amigo , só utilize essa linha para desativar durante o desenvolvimento, não fazer isso
-                 * no produto final, uma vez que o back e o front estarão no mesmo dominío.
-                */
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(request -> request.requestMatchers("/auth/login", "/auth/register", "/auth/logout")
+                .authorizeHttpRequests(request -> request.requestMatchers("/auth/login", "/auth/register", "/auth/logout", "/auth/existcheck", "/auth/checkTokenExp")
                         .permitAll()
                         .requestMatchers(HttpMethod.GET, "/quadro", "/quadro/*", "quadro/image/*")
                         .permitAll()

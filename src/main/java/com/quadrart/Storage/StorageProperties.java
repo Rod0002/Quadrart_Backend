@@ -1,5 +1,6 @@
 package com.quadrart.Storage;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /*
@@ -9,7 +10,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("storage")
 public class StorageProperties {
     
-    private String location = "{Defina_Seu_Caminho_de_Imagens}";
+    @Value("${path.fileSystem}")
+    private String location;
 
     public String getLocation() {
         return location;

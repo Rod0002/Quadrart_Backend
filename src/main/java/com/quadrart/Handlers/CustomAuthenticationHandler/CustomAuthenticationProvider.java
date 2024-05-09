@@ -52,8 +52,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         Usuario usuario = usuarioService.loadUserByUsername(login);
 
-        if (usuario.getUsername() == null){
-            usuario = usuarioService.loadUserByUsername(login);
+        System.out.println(usuario);
+        if (usuario == null){
+            usuario = usuarioService.loadUserByEmail(login);
         } 
 
         if (passwordEncoder.matches(password, usuario.getPassword())) {

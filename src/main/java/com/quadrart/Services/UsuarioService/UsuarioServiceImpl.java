@@ -1,5 +1,7 @@
 package com.quadrart.Services.UsuarioService;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.quadrart.Models.Usuario.Usuario;
@@ -56,6 +58,16 @@ public class UsuarioServiceImpl implements UsuarioService {
     public String deleteUser(Long id){
         usuarioRepository.deleteById(id);
         return "O usuário de ID: %s foi deletado".formatted(id);
+    }
+
+    @Override
+    public Usuario updateUser(Usuario usuario) {
+        Usuario user = usuarioRepository.findByUsername(usuario.getUsername());
+        if (user != null){
+            return usuarioRepository.save(user);
+        } else {
+            return user;
+        }
     }
     
 }

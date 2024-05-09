@@ -1,24 +1,32 @@
-package com.quadrart.Controllers.AuthController;
+package com.quadrart.Controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.quadrart.Handlers.CustomAuthenticationHandler.CustomAuthenticationProvider;
+import com.quadrart.Handlers.CustomAuthenticationProvider;
 import com.quadrart.Models.Usuario.RequestUsuarioLogin;
 import com.quadrart.Models.Usuario.RequestUsuarioRegistro;
 import com.quadrart.Models.Usuario.Usuario;
 import com.quadrart.Services.JwtService.JwtService;
 import com.quadrart.Services.UsuarioService.UsuarioService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -27,13 +35,8 @@ import org.springframework.web.bind.annotation.RequestBody;
  * registro e logout.
  */
 
-/*
- * @CrossOrigin(origins="{Seu_front_end}", allowCredentials="true");
- * 
- * Só utilize isso durante o desenvolvimento para integrar seu front
- * com o back durante o desenvolvimento, antes do deploy, remover 
- * o CrossOrigin.
- */
+
+@CrossOrigin(origins="http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -82,11 +85,11 @@ public class AuthController {
 
                 Usuario usuario = usuarioService.loadUserByUsername(requestUsuarioLogin.login());
 
-                if(usuario.getUsername() == null){
+                if(usuario == null){
                         usuario = usuarioService.loadUserByEmail(requestUsuarioLogin.login());
                 }
 
-                String jwt = jwtService.generateToken(usuario, 72);
+                String jwt = jwtService.generateToken(usuario,72);
 
                 ResponseCookie cookie = ResponseCookie.from("accessToken", jwt)
                                 .httpOnly(true)
@@ -147,7 +150,7 @@ public class AuthController {
 
         @PostMapping("/logout")
         public ResponseEntity<?> logoutUser(HttpServletResponse response) {
-                String jwt = jwtService.generateToken(new Usuario(), 0);
+                String jwt = jwtService.generateToken(new Usuario(), 72);
 
                 ResponseCookie cookie = ResponseCookie.from("accessToken", jwt)
                                 .httpOnly(true)
@@ -159,6 +162,44 @@ public class AuthController {
 
                 return ResponseEntity.ok("Usuário deslogado com sucessso");
 
+        }
+
+        @PostMapping("/existcheck")
+        public ResponseEntity<?> checkUserExists(@RequestBody Map<String, String> requestData) {
+            String email = requestData.get("email");
+            String username = requestData.get("username");
+
+            boolean emailExists = usuarioService.loadUserByEmail(email) != null;
+            boolean usernameExists = usuarioService.loadUserByUsername(username) != null;
+
+            // Se email ou username existe, retornar true, caso contrário, retornar false
+            boolean exists = emailExists || usernameExists;
+
+            return ResponseEntity.ok(exists);
+
+        }
+
+        @GetMapping("/checkTokenExp")
+        public ResponseEntity<?> checkTokenExpiration(HttpServletRequest request) {
+
+            String token = null;
+
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals("accessToken")) {
+                    token = cookie.getValue();
+                }
+            }
+
+            if (token == null){
+                ResponseEntity.badRequest().body("Token Invalido");
+            }
+
+            try {
+                jwtService.isTokenExpired(token);
+                return ResponseEntity.ok("Token é valido");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Token Invalido");
+            }
         }
 
 }
